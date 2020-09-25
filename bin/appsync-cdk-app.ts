@@ -44,6 +44,7 @@ class PipelineStack extends Stack {
                 // Replace these with your actual GitHub project name
                 owner: 'askulkarni2',
                 repo: 'cdk-graphql-backend',
+                branch: 'main'
             }),
 
             synthAction: SimpleSynthAction.standardNpmSynth({
