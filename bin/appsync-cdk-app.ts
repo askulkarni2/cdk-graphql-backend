@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import { AppsyncCdkAppStack } from '../lib/appsync-cdk-app-stack';
-import { App, Construct, Stage, Stack, StackProps, StageProps, SecretValue } from '@aws-cdk/core';
+import { App, Construct, Stage, Stack, StackProps, StageProps, SecretValue, CfnParameter } from '@aws-cdk/core';
 import { CdkPipeline, SimpleSynthAction } from '@aws-cdk/pipelines';
 import * as codepipeline from '@aws-cdk/aws-codepipeline';
 import * as codepipeline_actions from '@aws-cdk/aws-codepipeline-actions';
@@ -32,6 +32,10 @@ class PipelineStack extends Stack {
 
         const sourceArtifact = new codepipeline.Artifact();
         const cloudAssemblyArtifact = new codepipeline.Artifact();
+        const githubOrg = new CfnParameter(this, "GitHubOrg", {
+            type: "String",
+            description: "The name of the GitHub org which the pipeline will use as Source."
+        });
 
         const pipeline = new CdkPipeline(this, 'Pipeline', {
             pipelineName: 'AppSyncPipeline',
@@ -42,7 +46,7 @@ class PipelineStack extends Stack {
                 output: sourceArtifact,
                 oauthToken: SecretValue.secretsManager('GITHUB_TOKEN'),
                 // Replace these with your actual GitHub project name
-                owner: 'askulkarni2',
+                owner: githubOrg.valueAsString,
                 repo: 'cdk-graphql-backend',
                 branch: 'main'
             }),
