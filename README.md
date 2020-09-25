@@ -42,8 +42,6 @@ npm run build
 env CDK_NEW_BOOTSTRAP=1  cdk bootstrap \
     --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess \
     aws://212687814973/us-west-2
-
-cdk deploy
 ```
 
 6. Deploy the pipeline Stack
