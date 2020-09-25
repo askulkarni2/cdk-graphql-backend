@@ -12,7 +12,7 @@ To deploy this project, follow these steps.
 git clone https://github.com/dabit3/cdk-graphql-backend.git 
 ```
 
-1. Change into the directory and install dependencies
+2. Change into the directory and install dependencies
 
 ```sh
 cd cdk-graphql-backend
@@ -20,7 +20,7 @@ cd cdk-graphql-backend
 npm install
 ```
 
-1. Create `GITHUB_TOKEN` as a AWS Secrets Manager secret.
+3. Create `GITHUB_TOKEN` as a AWS Secrets Manager secret.
 
 ```sh
 aws secretsmanager create-secret --name GITHUB_TOKEN \
@@ -28,13 +28,13 @@ aws secretsmanager create-secret --name GITHUB_TOKEN \
     --secret-string "$GITHUB_TOKEN"
 ```
 
-1. Run the build
+4. Run the build
 
 ```sh
 npm run build
 ```
 
-1. Bootstrap CDK using the `CDK_NEW_BOOTSTRAP` flag.
+5. Bootstrap CDK using the `CDK_NEW_BOOTSTRAP` flag.
 
 ```sh
 env CDK_NEW_BOOTSTRAP=1  cdk bootstrap \
@@ -44,7 +44,7 @@ env CDK_NEW_BOOTSTRAP=1  cdk bootstrap \
 cdk deploy
 ```
 
-1. Deploy the pipeline Stack
+6. Deploy the pipeline Stack
 
 ```sh
 cdk deploy
