@@ -1,15 +1,17 @@
 # CDK AppSync GraphQL API
 
-This CDK stack deploys a real-time GraphQL API built with AWS AppSync, Amazon DynamoDB, and AWS Lambda.
+This CDK stack deploys a real-time GraphQL API built with AWS AppSync, Amazon DynamoDB, and AWS Lambda. We use CDK to create a CodePipeline that will Continously Deploy our changes to the target environments.
 
 ## Getting started
 
 To deploy this project, follow these steps.
 
-1. Clone the project
+0. Fork the project to your GitHub.
+
+1. Clone the project 
 
 ```sh
-git clone https://github.com/dabit3/cdk-graphql-backend.git 
+git clone https://github.com/askulkarni2/cdk-graphql-backend.git 
 ```
 
 2. Change into the directory and install dependencies
@@ -49,3 +51,7 @@ cdk deploy
 ```sh
 cdk deploy
 ```
+
+## Sample Pipeline
+
+![pipeline](images/Pipeline.png)
