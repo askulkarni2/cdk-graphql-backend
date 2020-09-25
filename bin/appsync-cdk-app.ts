@@ -59,7 +59,7 @@ class PipelineStack extends Stack {
 
         // Do this as many times as necessary with any account and region
         // Account and region may different from the pipeline's.
-        pipeline.addApplicationStage(new AppSyncApplication(this, 'Alpha');
+        pipeline.addApplicationStage(new AppSyncApplication(this, 'Alpha'));
     }
 }
 
