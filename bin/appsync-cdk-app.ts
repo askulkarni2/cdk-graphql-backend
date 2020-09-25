@@ -56,6 +56,10 @@ class PipelineStack extends Stack {
                 buildCommand: 'npm run build',
             }),
         });
+
+        // Do this as many times as necessary with any account and region
+        // Account and region may different from the pipeline's.
+        pipeline.addApplicationStage(new AppSyncApplication(this, 'Alpha');
     }
 }
 
