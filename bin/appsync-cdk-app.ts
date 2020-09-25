@@ -45,7 +45,6 @@ class PipelineStack extends Stack {
                 actionName: 'GitHub',
                 output: sourceArtifact,
                 oauthToken: SecretValue.secretsManager('GITHUB_TOKEN'),
-                // Replace these with your actual GitHub project name
                 owner: githubOrg.valueAsString,
                 repo: 'cdk-graphql-backend',
                 branch: 'main'

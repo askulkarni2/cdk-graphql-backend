@@ -8,7 +8,7 @@ To deploy this project, follow these steps.
 
 0. Fork the project to your GitHub.
 
-1. Clone the project 
+1. Clone the project
 
 ```sh
 git clone https://github.com/askulkarni2/cdk-graphql-backend.git 
@@ -49,7 +49,7 @@ cdk deploy
 6. Deploy the pipeline Stack
 
 ```sh
-cdk deploy
+cdk deploy --parameters GitHubOrg=askulkarni2
 ```
 
 ## Sample Pipeline
