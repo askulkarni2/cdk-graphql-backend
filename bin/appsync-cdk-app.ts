@@ -7,12 +7,10 @@ import * as codepipeline from '@aws-cdk/aws-codepipeline';
 import * as codepipeline_actions from '@aws-cdk/aws-codepipeline-actions';
 
 /**
- * Your application
+ * Your AppSync application
  *
- * May consist of one or more Stacks (here, two)
- *
- * By declaring our DatabaseStack and our ComputeStack inside a Stage,
- * we make sure they are deployed together, or not at all.
+ * May consist of one or more Stacks]
+ * 
  */
 class AppSyncApplication extends Stage {
     constructor(scope: Construct, id: string, props?: StageProps) {
