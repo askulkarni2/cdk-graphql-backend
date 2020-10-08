@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import { AppsyncCdkAppStack } from '../lib/appsync-cdk-app-stack';
-import { App, Construct, Stage, Stack, StackProps, StageProps, SecretValue, CfnParameter } from '@aws-cdk/core';
+import { App, Construct, Stage, Stack, StackProps, StageProps, SecretValue, CfnParameter, CfnOutput } from '@aws-cdk/core';
 import { CdkPipeline, SimpleSynthAction } from '@aws-cdk/pipelines';
 import * as codepipeline from '@aws-cdk/aws-codepipeline';
 import * as codepipeline_actions from '@aws-cdk/aws-codepipeline-actions';
@@ -25,6 +25,7 @@ class AppSyncApplication extends Stage {
  * Stack to hold the pipeline
  */
 class PipelineStack extends Stack {
+
     constructor(scope: Construct, id: string, props?: StackProps) {
         super(scope, id, props);
 
@@ -36,7 +37,6 @@ class PipelineStack extends Stack {
         });
 
         const pipeline = new CdkPipeline(this, 'Pipeline', {
-            pipelineName: 'AppSyncPipeline',
             cloudAssemblyArtifact,
 
             sourceAction: new codepipeline_actions.GitHubSourceAction({
@@ -61,6 +61,12 @@ class PipelineStack extends Stack {
         // Do this as many times as necessary with any account and region
         // Account and region may different from the pipeline's.
         pipeline.addApplicationStage(new AppSyncApplication(this, 'Alpha'));
+
+        //  PipelineName as output
+        new CfnOutput(this, 'PipelineName', {
+            description: 'Name of the AppSync Pipeline',
+            value: pipeline.codePipeline.pipelineName
+        });
     }
 }
 
