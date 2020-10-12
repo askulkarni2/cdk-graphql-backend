@@ -63,6 +63,7 @@ class PipelineStack extends Stack {
             actionName: 'StaticAnalysis',
             additionalArtifacts: [sourceArtifact],
             commands: [
+                'npm i graphql-schema-utilities',
                 'node_modules/.bin/graphql-schema-utilities -s "./graphql/**/*.graphql"'
             ]
         });
