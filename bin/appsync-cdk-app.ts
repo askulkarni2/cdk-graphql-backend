@@ -2,7 +2,7 @@
 import 'source-map-support/register';
 import { AppsyncCdkAppStack } from '../lib/appsync-cdk-app-stack';
 import { App, Construct, Stage, Stack, StackProps, StageProps, SecretValue, CfnParameter, CfnOutput } from '@aws-cdk/core';
-import { CdkPipeline, SimpleSynthAction } from '@aws-cdk/pipelines';
+import { CdkPipeline, ShellScriptAction, SimpleSynthAction } from '@aws-cdk/pipelines';
 import * as codepipeline from '@aws-cdk/aws-codepipeline';
 import * as codepipeline_actions from '@aws-cdk/aws-codepipeline-actions';
 
@@ -55,8 +55,17 @@ class PipelineStack extends Stack {
                 // Use this if you need a build step (if you're not using ts-node
                 // or if you have TypeScript Lambdas that need to be compiled).
                 buildCommand: 'npm run build',
-            }),
+            })
         });
+
+        // Add a static code analysis stage
+        const lintAction = new ShellScriptAction({
+            actionName: 'StaticAnalysis',
+            commands: [
+                'node_modules/.bin/graphql-schema-utilities -s "./graphql/**/*.graphql"'
+            ]
+        });
+        pipeline.addStage('UnitTests').addActions(lintAction);
 
         // Do this as many times as necessary with any account and region
         // Account and region may different from the pipeline's.
