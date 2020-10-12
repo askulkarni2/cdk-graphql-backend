@@ -61,6 +61,7 @@ class PipelineStack extends Stack {
         // Add a static code analysis stage
         const lintAction = new ShellScriptAction({
             actionName: 'StaticAnalysis',
+            additionalArtifacts: [sourceArtifact],
             commands: [
                 'node_modules/.bin/graphql-schema-utilities -s "./graphql/**/*.graphql"'
             ]
