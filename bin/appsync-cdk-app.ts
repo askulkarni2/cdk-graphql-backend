@@ -39,6 +39,7 @@ class PipelineStack extends Stack {
         const pipeline = new CdkPipeline(this, 'Pipeline', {
             cloudAssemblyArtifact,
 
+            // This is where the source code is grabbed from, GitHub for example.
             sourceAction: new codepipeline_actions.GitHubSourceAction({
                 actionName: 'GitHub',
                 output: sourceArtifact,
@@ -48,6 +49,7 @@ class PipelineStack extends Stack {
                 branch: 'main'
             }),
 
+            // This the where we synthesize the stacks and build our lambdas
             synthAction: SimpleSynthAction.standardNpmSynth({
                 sourceArtifact,
                 cloudAssemblyArtifact,
