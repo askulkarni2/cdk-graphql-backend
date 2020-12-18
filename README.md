@@ -6,12 +6,12 @@ This CDK stack deploys a real-time GraphQL API built with AWS AppSync, Amazon Dy
 
 To deploy this project, follow these steps.
 
-0. Fork the project to your GitHub.
+0. Fork the project to your GitHub/GitLab.
 
 1. Clone the project
 
 ```sh
-git clone https://github.com/askulkarni2/cdk-graphql-backend.git 
+git clone git@ssh.gitlab.aws.dev:kuapoorv/cdk-graphql-backend.git
 ```
 
 2. Change into the directory and install dependencies
