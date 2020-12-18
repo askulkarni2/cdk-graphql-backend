@@ -11,7 +11,7 @@ To deploy this project, follow these steps.
 1. Clone the project
 
 ```sh
-git clone git@ssh.gitlab.aws.dev:kuapoorv/cdk-graphql-backend.git
+git clone https://github.com/askulkarni2/cdk-graphql-backend.git
 ```
 
 2. Change into the directory and install dependencies
