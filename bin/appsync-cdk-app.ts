@@ -61,19 +61,32 @@ class PipelineStack extends Stack {
         });
 
         // Add a static code analysis stage
-        const lintAction = new ShellScriptAction({
-            actionName: 'StaticAnalysis',
+        const unitTestAction = new ShellScriptAction({
+            actionName: 'UnitTests',
             additionalArtifacts: [sourceArtifact],
             commands: [
-                'npm install graphql-schema-utilities',
+                // Install dependencies
+                'npm ci',
+                // Run the CDK Unit tests
+                'npm run test',
+                // GraphQL Schema Validation
                 'node_modules/.bin/graphql-schema-utilities -s "./graphql/**/*.graphql"'
             ]
         });
-        pipeline.addStage('UnitTests').addActions(lintAction);
+        pipeline.addStage('UnitTests').addActions(unitTestAction);
 
         // Do this as many times as necessary with any account and region
         // Account and region may different from the pipeline's.
         pipeline.addApplicationStage(new AppSyncApplication(this, 'Alpha'));
+
+        // Alpha Testing stage
+        const testAction = new ShellScriptAction({
+            actionName: 'AlphaIntegTesting',
+            additionalArtifacts: [sourceArtifact],
+            commands: [
+                ''
+            ]
+        });
 
         //  PipelineName as output
         new CfnOutput(this, 'PipelineName', {
