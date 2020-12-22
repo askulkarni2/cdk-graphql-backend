@@ -2,6 +2,8 @@ import * as cdk from '@aws-cdk/core';
 import * as appsync from '@aws-cdk/aws-appsync';
 import * as ddb from '@aws-cdk/aws-dynamodb';
 import * as lambda from '@aws-cdk/aws-lambda';
+import * as ssm from '@aws-cdk/aws-ssm';
+import * as secrets from '@aws-cdk/aws-secretsmanager';
 
 export class AppsyncCdkAppStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -21,19 +23,16 @@ export class AppsyncCdkAppStack extends cdk.Stack {
       xrayEnabled: true,
     });
 
-    // print out the AppSync GraphQL endpoint to the terminal
-    new cdk.CfnOutput(this, "GraphQLAPIURL", {
-     value: api.graphqlUrl
+    // store the API URL in SSM Parameter Store
+    new ssm.StringParameter(this, 'GraphQLAPIURL', {
+      parameterName: 'GraphQLAPIURL',
+      stringValue: api.graphqlUrl
     });
 
-    // print out the AppSync API Key to the terminal
-    new cdk.CfnOutput(this, "GraphQLAPIKey", {
-      value: api.apiKey || ''
-    });
-
-    // print out the stack region
-    new cdk.CfnOutput(this, "Stack Region", {
-      value: this.region
+    // store the AppSync API Key to Parameter Store to Secrets Manager
+    new secrets.CfnSecret(this, 'GraphQLAPIKey', {
+      name: 'GraphQLAPIKey',
+      secretString: api.apiKey || ''
     });
 
     const notesLambda = new lambda.Function(this, 'AppSyncNotesHandler', {
