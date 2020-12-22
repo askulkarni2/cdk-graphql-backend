@@ -84,7 +84,7 @@ class PipelineStack extends Stack {
             actionName: 'AlphaIntegTesting',
             additionalArtifacts: [sourceArtifact],
             commands: [
-                ''
+                'echo "hello world"'
             ]
         });
 
