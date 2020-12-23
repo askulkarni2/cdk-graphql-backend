@@ -41,7 +41,7 @@ describe('Create Note', () => {
         }
       }
     `
-    const response = await API.graphql({ 
+    const response = await API.graphql({
       query: mutation
     });
     expect(response).toMatchSnapshot();
@@ -91,7 +91,7 @@ describe('Update Note', () => {
         }
       }
     `
-    const response = await API.graphql({ 
+    const response = await API.graphql({
       query: mutation
     });
     expect(response).toMatchSnapshot();
@@ -102,10 +102,10 @@ describe('Delete Note', () => {
   it('Delete Note', async () => {
     const mutation = `
       mutation deleteNote {
-        deleteNote(noteId: "001") 
+        deleteNote(noteId: "001")
       }
     `
-    const response = await API.graphql({ 
+    const response = await API.graphql({
       query: mutation
     });
     expect(response).toMatchSnapshot();
