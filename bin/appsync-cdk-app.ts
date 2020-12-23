@@ -24,10 +24,10 @@ class AppSyncApplication extends Stage {
         // create the application stack here
         const appSyncStack = new AppsyncCdkAppStack(this, 'AppsyncCdkAppStack');
 
+        // Stack Outputs
         this.apiKey = new CfnOutput(appSyncStack, 'ApiKeySecret', {
             value: appSyncStack.api.apiKey || ''
         });
-
         this.apiURL = new CfnOutput(appSyncStack, 'GraphQLApiUrl', {
             value: appSyncStack.api.graphqlUrl
         });
@@ -96,17 +96,9 @@ class PipelineStack extends Stack {
         const e2eTestAction = new ShellScriptAction({
             actionName: 'AlphaE2ETesting',
             additionalArtifacts: [sourceArtifact],
-            environment: {
-                environmentVariables: {
-                    'API': {
-                        type: BuildEnvironmentVariableType.PLAINTEXT,
-                        value: pipeline.stackOutput(appSyncApp.apiURL.value)
-                    },
-                    'API_KEY': {
-                        type: BuildEnvironmentVariableType.PLAINTEXT,
-                        value: pipeline.stackOutput(appSyncApp.apiKey.value)
-                    }
-                }
+            useOutputs: {
+                API: pipeline.stackOutput(appSyncApp.apiURL),
+                API_KEY: pipeline.stackOutput(appSyncApp.apiKey)
             },
             commands: [
                 // Install dependencies
