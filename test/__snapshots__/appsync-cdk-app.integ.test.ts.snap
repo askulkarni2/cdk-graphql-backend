@@ -35,13 +35,7 @@ Object {
 exports[`List Empty Notes List Notes, should be empty 1`] = `
 Object {
   "data": Object {
-    "listNotes": Array [
-      Object {
-        "completed": true,
-        "id": "001",
-        "name": "My note",
-      },
-    ],
+    "listNotes": Array [],
   },
 }
 `;
