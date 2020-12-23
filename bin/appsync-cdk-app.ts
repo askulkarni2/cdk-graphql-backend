@@ -100,11 +100,11 @@ class PipelineStack extends Stack {
                 environmentVariables: {
                     'API': {
                         type: BuildEnvironmentVariableType.PLAINTEXT,
-                        value: pipeline.stackOutput(appSyncApp.apiURL)
+                        value: pipeline.stackOutput(appSyncApp.apiURL.value)
                     },
                     'API_KEY': {
                         type: BuildEnvironmentVariableType.PLAINTEXT,
-                        value: pipeline.stackOutput(appSyncApp.apiKey)
+                        value: pipeline.stackOutput(appSyncApp.apiKey.value)
                     }
                 }
             },
