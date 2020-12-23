@@ -48,7 +48,7 @@ class PipelineStack extends Stack {
             type: "String",
             description: "The name of the GitHub org which the pipeline will use as Source."
         });
-        const appSyncApp = new AppSyncApplication(this, 'DeployAlpha');
+        const alpha = new AppSyncApplication(this, 'DeployAlpha');
         const pipeline = new CdkPipeline(this, 'Pipeline', {
             cloudAssemblyArtifact,
 
@@ -90,15 +90,15 @@ class PipelineStack extends Stack {
 
         // Do this as many times as necessary with any account and region
         // Account and region may different from the pipeline's.
-        pipeline.addApplicationStage(appSyncApp);
+        pipeline.addApplicationStage(alpha);
 
         // Alpha Testing stage
         const e2eTestAction = new ShellScriptAction({
             actionName: 'AlphaE2ETesting',
             additionalArtifacts: [sourceArtifact],
             useOutputs: {
-                API: pipeline.stackOutput(appSyncApp.apiURL),
-                API_KEY: pipeline.stackOutput(appSyncApp.apiKey)
+                API_URL: pipeline.stackOutput(alpha.apiURL),
+                API_KEY: pipeline.stackOutput(alpha.apiKey)
             },
             commands: [
                 // Install dependencies
