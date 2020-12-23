@@ -10,15 +10,27 @@ import { BuildEnvironmentVariableType } from '@aws-cdk/aws-codebuild';
 /**
  * Your AppSync application
  *
- * May consist of one or more Stacks]
+ * May consist of one or more Stacks
  * 
  */
 class AppSyncApplication extends Stage {
+
+    public readonly apiKey: CfnOutput;
+    public readonly apiURL: CfnOutput;
+
     constructor(scope: Construct, id: string, props?: StageProps) {
         super(scope, id, props);
 
         // create the application stack here
-        new AppsyncCdkAppStack(this, 'AppsyncCdkAppStack');
+        const appSyncStack = new AppsyncCdkAppStack(this, 'AppsyncCdkAppStack');
+
+        this.apiKey = new CfnOutput(appSyncStack, 'ApiKeySecret', {
+            value: appSyncStack.api.apiKey || ''
+        });
+
+        this.apiURL = new CfnOutput(appSyncStack, 'GraphQLApiUrl', {
+            value: appSyncStack.api.graphqlUrl
+        });
     }
 }
 
@@ -36,7 +48,7 @@ class PipelineStack extends Stack {
             type: "String",
             description: "The name of the GitHub org which the pipeline will use as Source."
         });
-
+        const appSyncApp = new AppSyncApplication(this, 'DeployAlpha');
         const pipeline = new CdkPipeline(this, 'Pipeline', {
             cloudAssemblyArtifact,
 
@@ -78,7 +90,7 @@ class PipelineStack extends Stack {
 
         // Do this as many times as necessary with any account and region
         // Account and region may different from the pipeline's.
-        pipeline.addApplicationStage(new AppSyncApplication(this, 'DeployAlpha'));
+        pipeline.addApplicationStage(appSyncApp);
 
         // Alpha Testing stage
         const e2eTestAction = new ShellScriptAction({
@@ -87,12 +99,12 @@ class PipelineStack extends Stack {
             environment: {
                 environmentVariables: {
                     'API': {
-                        type: BuildEnvironmentVariableType.PARAMETER_STORE,
-                        value: 'GraphQLAPIURL'
+                        type: BuildEnvironmentVariableType.PLAINTEXT,
+                        value: pipeline.stackOutput(appSyncApp.apiURL)
                     },
                     'API_KEY': {
-                        type: BuildEnvironmentVariableType.SECRETS_MANAGER,
-                        value: 'GraphQLAPIKey'
+                        type: BuildEnvironmentVariableType.PLAINTEXT,
+                        value: pipeline.stackOutput(appSyncApp.apiKey)
                     }
                 }
             },

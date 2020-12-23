@@ -6,10 +6,13 @@ import * as ssm from '@aws-cdk/aws-ssm';
 import * as secrets from '@aws-cdk/aws-secretsmanager';
 
 export class AppsyncCdkAppStack extends cdk.Stack {
+
+  public readonly api: appsync.GraphqlApi;
+
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const api = new appsync.GraphqlApi(this, 'Api', {
+    this.api = new appsync.GraphqlApi(this, 'Api', {
       name: 'cdk-notes-appsync-api',
       schema: appsync.Schema.fromAsset('graphql/schema.graphql'),
       authorizationConfig: {
@@ -23,18 +26,6 @@ export class AppsyncCdkAppStack extends cdk.Stack {
       xrayEnabled: true,
     });
 
-    // store the API URL in SSM Parameter Store
-    new ssm.StringParameter(this, 'GraphQLAPIURL', {
-      parameterName: 'GraphQLAPIURL',
-      stringValue: api.graphqlUrl
-    });
-
-    // store the AppSync API Key to Parameter Store to Secrets Manager
-    new secrets.CfnSecret(this, 'GraphQLAPIKey', {
-      name: 'GraphQLAPIKey',
-      secretString: api.apiKey || ''
-    });
-
     const notesLambda = new lambda.Function(this, 'AppSyncNotesHandler', {
       runtime: lambda.Runtime.NODEJS_12_X,
       handler: 'appsync-ds-main.handler',
@@ -43,7 +34,7 @@ export class AppsyncCdkAppStack extends cdk.Stack {
     });
     
     // set the new Lambda function as a data source for the AppSync API
-    const lambdaDs = api.addLambdaDataSource('lambdaDatasource', notesLambda);
+    const lambdaDs = this.api.addLambdaDataSource('lambdaDatasource', notesLambda);
 
     // create resolvers to match GraphQL operations in schema
     lambdaDs.createResolver({
