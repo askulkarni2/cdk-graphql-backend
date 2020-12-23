@@ -1,3 +1,8 @@
+/**
+ * Tests AppSyncCdkApp
+ * 
+ * @group unit
+ */
 import { SynthUtils } from '@aws-cdk/assert';
 import { Stack } from '@aws-cdk/core';
 import * as AppSyncCdkApp from '../lib/appsync-cdk-app-stack';

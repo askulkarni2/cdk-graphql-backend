@@ -5,6 +5,7 @@ import { App, Construct, Stage, Stack, StackProps, StageProps, SecretValue, CfnP
 import { CdkPipeline, ShellScriptAction, SimpleSynthAction } from '@aws-cdk/pipelines';
 import * as codepipeline from '@aws-cdk/aws-codepipeline';
 import * as codepipeline_actions from '@aws-cdk/aws-codepipeline-actions';
+import { BuildEnvironmentVariableType } from '@aws-cdk/aws-codebuild';
 
 /**
  * Your AppSync application
@@ -67,8 +68,8 @@ class PipelineStack extends Stack {
             commands: [
                 // Install dependencies
                 'npm ci',
-                // Run the CDK Unit tests
-                'npm run test',
+                // Run the Unit tests
+                'npm test -- --group=unit',
                 // GraphQL Schema Validation
                 'node_modules/.bin/graphql-schema-utilities -s "./graphql/**/*.graphql"'
             ]
@@ -77,16 +78,32 @@ class PipelineStack extends Stack {
 
         // Do this as many times as necessary with any account and region
         // Account and region may different from the pipeline's.
-        pipeline.addApplicationStage(new AppSyncApplication(this, 'Alpha'));
+        pipeline.addApplicationStage(new AppSyncApplication(this, 'DeployAlpha'));
 
         // Alpha Testing stage
-        const testAction = new ShellScriptAction({
-            actionName: 'AlphaIntegTesting',
+        const e2eTestAction = new ShellScriptAction({
+            actionName: 'AlphaE2ETesting',
             additionalArtifacts: [sourceArtifact],
+            environment: {
+                environmentVariables: {
+                    'API': {
+                        type: BuildEnvironmentVariableType.PARAMETER_STORE,
+                        value: 'GraphQLAPIURL'
+                    },
+                    'API_KEY': {
+                        type: BuildEnvironmentVariableType.SECRETS_MANAGER,
+                        value: 'GraphQLAPIKey'
+                    }
+                }
+            },
             commands: [
-                'echo "hello world"'
+                // Install dependencies
+                'npm ci',
+                // Run the Integ tests
+                'npm test -- --group=e2e',
             ]
         });
+        pipeline.addStage('E2ETests').addActions(e2eTestAction);
 
         //  PipelineName as output
         new CfnOutput(this, 'PipelineName', {
