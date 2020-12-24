@@ -49,6 +49,7 @@ class PipelineStack extends Stack {
             description: "The name of the GitHub org which the pipeline will use as Source."
         });
         const alpha = new AppSyncApplication(this, 'DeployAlpha');
+        const prod = new AppSyncApplication(this, 'DeployProd');
         const pipeline = new CdkPipeline(this, 'Pipeline', {
             cloudAssemblyArtifact,
 
@@ -108,6 +109,9 @@ class PipelineStack extends Stack {
             ]
         });
         pipeline.addStage('E2ETests').addActions(e2eTestAction);
+
+        // Deploy to prod
+        pipeline.addApplicationStage(prod);
 
         //  PipelineName as output
         new CfnOutput(this, 'PipelineName', {

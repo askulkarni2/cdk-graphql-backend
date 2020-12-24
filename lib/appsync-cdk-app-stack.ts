@@ -2,8 +2,6 @@ import * as cdk from '@aws-cdk/core';
 import * as appsync from '@aws-cdk/aws-appsync';
 import * as ddb from '@aws-cdk/aws-dynamodb';
 import * as lambda from '@aws-cdk/aws-lambda';
-import * as ssm from '@aws-cdk/aws-ssm';
-import * as secrets from '@aws-cdk/aws-secretsmanager';
 
 export class AppsyncCdkAppStack extends cdk.Stack {
 
