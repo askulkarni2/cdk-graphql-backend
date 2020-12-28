@@ -82,9 +82,7 @@ class PipelineStack extends Stack {
                 // Install dependencies
                 'npm ci',
                 // Run the Unit tests
-                'npm test -- --group=unit',
-                // GraphQL Schema Validation
-                'node_modules/.bin/graphql-schema-utilities -s "./graphql/**/*.graphql"'
+                'npm test -- --group=unit'
             ]
         });
         pipeline.addStage('UnitTests').addActions(unitTestAction);
