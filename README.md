@@ -49,7 +49,3 @@ env CDK_NEW_BOOTSTRAP=1  cdk bootstrap \
 ```sh
 cdk deploy --parameters GitHubOrg=askulkarni2
 ```
-
-## Sample Pipeline
-
-![pipeline](images/Pipeline.png)
