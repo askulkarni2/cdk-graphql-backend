@@ -11,7 +11,7 @@ interface Params {
 }
 
 async function updateNote(note: any) {
-  let params: Params = {
+  const params: Params = {
     TableName: process.env.NOTES_TABLE!,
     Key: {
       id: note.id
@@ -26,9 +26,9 @@ async function updateNote(note: any) {
   for (let i=0; i<attributes.length; i++) {
     let attribute = attributes[i];
     if (attribute !== "id") {
-      params["UpdateExpression"] += prefix + "#" + attribute + " = :" + attribute;
-      params["ExpressionAttributeValues"][":" + attribute] = note[attribute];
-      params["ExpressionAttributeNames"]["#" + attribute] = attribute;
+      params["UpdateExpression"] += `${prefix}#${attribute} = :${attribute}`;
+      params["ExpressionAttributeValues"][`:${attribute}`] = note[attribute];
+      params["ExpressionAttributeNames"][`#${attribute}`] = attribute;
       prefix = ", ";
     }
  }
